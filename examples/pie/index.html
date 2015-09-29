@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+<script src="http://xml3d.org/xml3d/scripts/xml3d-dev-min.js"></script>
+<script type="text/javascript" src="../../scripts/camera.js"></script>
+<script src="../../scripts/xml3d/xml3d.js"></script>
+<script src="../../scripts/xml3d/arc.js"></script>
+<script src="../../d4.js"></script>
+	  <script type="text/javascript">
+		 window.addEventListener("load", function() {
+			var viewElem = document.getElementById("Camera");
+			window.DemoCamera = new XML3D.StandardCamera(viewElem, {
+				mode:"examine"
+			});
+		 });
+	  </script>
+
+<xml3d width="960" height="500">
+    <defs>
+        <material id="mat" model="urn:xml3d:material:phong">
+            <texture name="diffuseTexture">
+                <img src="uv-1024.png">
+            </texture>
+                <float name="ambientIntensity">1</float>
+        </material>
+    </defs>
+    <group id="root">
+
+    </group>
+</xml3d>
+
+<script>
+
+    function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return (result ? [
+        parseInt(result[1], 16) / 255,
+        parseInt(result[2], 16) / 255,
+        parseInt(result[3], 16) / 255
+    ] : [0, 0, 0]).join(" ");
+}
+
+
+var width = 960,
+    height = 500,
+    radius = Math.min(width, height) / 2;
+
+var color = d3.scale.ordinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+var arc = d3.xml3d.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0)
+        .height(function(d) {
+            return d.value / 200000;
+        });
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.population; });
+
+/*var xml3d = d3.select("body").append("xml3d")
+    .attr("width", width)
+    .attr("height", height);
+
+var material = xml3d.append("defs").append("material").attr({
+    id: "mat",
+    "model": "urn:xml3d:material:phong"
+});
+material.param({"diffuseColor": "1 0 0", "ambientIntensity": { type: "float", value: 0.8} }).param("diffuseTexture", "<img src: { type: texture, });*/
+
+
+var group = d3.select("#root").append("group")
+    .style("transform", "translate3d(" + width / 2 + "px," + height / 2 + "px,-100px)")
+    .attr("material", "#mat");
+
+group.append("light");
+
+group.append("transform").attr({
+    id: "cameraTransform",
+    translation: "0 1245 0",
+    rotation: "1 0 0 -1.5707"
+});
+group.append("view").attr({
+    id: "Camera",
+    transform: "#cameraTransform"
+});
+
+
+d3.csv("data.csv", function(error, data) {
+
+  data.forEach(function(d) {
+    d.population = +d.population;
+  });
+
+  var g = group.selectAll(".arc")
+      .data(pie(data))
+      .enter().append("mesh")
+      .attr("class", "arc");
+
+  var t = g.append("data").attr("compute", arc.operator());
+  t.param(arc);//.param("diffuseColor", function(d) { return hexToRgb(color(d.data.age)); });
+      //.style("fill", function(d) { return color(d.data.age); });
+
+  /*g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+      .text(function(d) { return d.data.age; });*/
+
+});
+
+</script>

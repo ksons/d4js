@@ -17,13 +17,21 @@ d3.xml3d.arc = function () {
 
     function arc() {
         return {
+            innerRadius: 0,
+            outerRadius: outerRadius.apply(this, arguments),
+            startAngle: startAngle.apply(this, arguments),
+            endAngle: endAngle.apply(this, arguments),
+            height: height.apply(this, arguments),
+            steps: 16
+        }
+        /*return {
             innerRadius: { type: "float", value: 0 },
             outerRadius : { type: "float", value: outerRadius.apply(this, arguments) },
             startAngle: { type: "float", value: startAngle.apply(this, arguments) },
             endAngle: { type: "float", value: endAngle.apply(this, arguments)},
             height: { type: "float", value: height.apply(this, arguments)},
             steps: { type: "int", value: 16 }
-        };
+        };*/
     }
 
 

@@ -1,0 +1,64 @@
+﻿<html>
+
+<head>
+	<title>Text Rendering - Bitmap Fonts</title>
+
+	<link rel="stylesheet" type="text/css" media="all" href="styles.css"/>
+
+	<script type="text/javascript" src="xml3d-custom.js"></script>
+	<script type="text/javascript" src="shade-0.2.js"></script>
+	<script type="text/javascript" src="../../xml3d-tools/camera.js"></script>
+
+    <script type="text/javascript">
+	
+		function onload() {
+			var viewElem = document.getElementById("Camera");
+			window.DemoCamera = new XML3D.StandardCamera(viewElem, {
+				mode: "examine",
+				updateExaminePoint: true,
+				upVector: [0,1,0]
+			});
+
+		};
+		
+		window.addEventListener('load', onload);
+	</script>
+	
+</head>
+
+<body>
+	<div id="myxml3d">
+		<xml3d id="myxml3dcanvas" view="#Camera" style="width: 800px; height: 600px; background-color: eeeeee;">
+
+			<!-- Asset Instance -->
+			<model src="basic.xml#box"></model>
+			
+			<model src="text.xml#bitmap-naive" style="transform: translateY(1px);">
+				<assetdata name="config">
+					<string name="text">Deutsches Forschungszentrum für Künstliche Intelligenz (DFKI) GmbH</string>
+				</assetdata>
+			</model>
+
+   			<model src="text.xml#bitmap-alphatest" style="transform: translate3d(1.5px, 0.5px, 0.5px);">
+				<assetdata name="config">
+					<string name="text">Agenten und Simulierte Realität</string>
+				</assetdata>
+			</model>
+			
+  			<model src="text.xml#bitmap-distancefield" style="transform: translate3d(3px, 0px, 1px);">
+				<assetdata name="config">
+					<string name="text">Saarbrücken, Germany</string>
+				</assetdata>
+			</model>
+
+			<!-- View with camera positioning -->
+			<transform id="Camera_tf" translation="3 5 10" rotation="1 0 0 -0.3854"></transform>
+			<view id="Camera" transform="#Camera_tf"></view>
+
+		</xml3d>
+	</div>
+	<div id="debug" style="padding-top: 30px; background: 888888;">
+	</div>
+</body>
+
+</html>

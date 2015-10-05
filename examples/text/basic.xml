@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml3d xmlns="http://www.w3.org/1999/xhtml">
+	
+	<defs>
+		<material id="red" model="urn:xml3d:material:diffuse">
+			<float3 name="diffuseColor">1 0 0</float3>
+			<float name="ambientIntensity">0.5686</float>
+			<float name="transparency">0.0</float>
+		</material>
+	</defs>
+	
+	<asset id="box" material="#red">
+		<assetdata name="export">
+			<int name="segments">1 1 1</int>
+			<float3 name="extend">2 2 2</float3>
+		</assetdata>
+		<assetmesh compute="dataflow['http://stlemme.github.io/xflow-registry/dataflow/geometry.xml#gen-box']" includes="export"></assetmesh>
+	</asset>
+	
+</xml3d>
